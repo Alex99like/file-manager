@@ -17,7 +17,7 @@ const currentPath = new Path()
 const fileService = new FileService()
 
 const actions = async (argv) => {
-  const [command, optionOne] = argv.split(' ')
+  const [command, optionOne, optionTwo] = argv.split(' ')
 
   let filePath;
     if (optionOne)
@@ -45,8 +45,28 @@ const actions = async (argv) => {
     return
   }
 
-  if (command === 'cat') {
+  if (command === 'cat' && filePath) {
     fileService.readFile(filePath, currentPath.path)
+    return
+  }
+
+  if (command === 'rn' && filePath && optionTwo) {
+    fileService.renameFile(filePath, currentPath.path, optionTwo)
+    return
+  }
+
+  if (command === 'cp' && filePath && optionTwo) {
+    fileService.copyFile(filePath, currentPath.path, optionTwo)
+    return
+  }
+
+  if (command === 'mv' && filePath && optionTwo) {
+    fileService.copyFile(filePath, currentPath.path, optionTwo, 'rm')
+    return
+  }
+
+  if (command === 'rm' && filePath) {
+    await fileService.deleteFile(filePath, currentPath.path)
     return
   }
 
