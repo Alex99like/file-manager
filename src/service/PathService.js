@@ -1,13 +1,6 @@
 import os from 'os'
 import path from 'path'
 import fs from 'fs/promises'
-import cp from 'child_process'
-import { fileURLToPath } from 'url'
-import { stdWrite } from './stdWrite.js'
-
-const __dirname = path.dirname(fileURLToPath(import.meta.url))
-
-cp.fork(path.resolve(__dirname, 'stdWrite.js'))
 
 export class Path {
   constructor() {

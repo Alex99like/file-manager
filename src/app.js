@@ -1,22 +1,31 @@
 import process from 'process'
 import path from 'path'
 import { getUserName } from './utils/getUserName.js'
-import { stdChunk, stdWrite } from './utils/stdWrite.js'
+import { stdChunk, stdWrite } from './service/stdWrite.js'
 import cp from 'child_process'
 import { fileURLToPath } from 'url'
-import { Path } from './utils/Path.js'
-import os from 'os'
+import { Path } from './service/PathService.js'
+import { FileService } from './service/FileService.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 const userName = getUserName(process.argv)
 
-cp.fork(path.resolve(__dirname, 'utils', 'stdWrite.js'))
+cp.fork(path.resolve(__dirname, 'service', 'stdWrite.js'))
 
 const currentPath = new Path()
+const fileService = new FileService()
 
 const actions = async (argv) => {
   const [command, optionOne] = argv.split(' ')
+
+  let filePath;
+    if (optionOne)
+    if (path.isAbsolute(optionOne)) {
+      filePath = optionOne
+    } else {
+      filePath = path.join(currentPath.path, optionOne)
+    }
 
   if (command === 'cd') {
     await currentPath.update(optionOne)
@@ -33,6 +42,16 @@ const actions = async (argv) => {
   if (command === 'ls') {
     const val = await currentPath.viewDir()
     if (val) stdWrite(null, currentPath.path) 
+    return
+  }
+
+  if (command === 'cat') {
+    fileService.readFile(filePath, currentPath.path)
+    return
+  }
+
+  if (command === 'add') {
+    fileService.createFile(filePath, currentPath.path)
     return
   }
 
