@@ -15,11 +15,22 @@ export class Path {
   }
 
   async update(newPath) {
-    try {
-      await fs.stat(path.join(...this.arrPath, newPath))
-      this.arrPath.push(newPath)
-    } catch(e) {
-      console.log('Failed operation')
+    const pathAbs = path.isAbsolute(newPath) 
+    
+    if (pathAbs) {
+      try {
+        await fs.stat(path.join(newPath))
+        this.arrPath = newPath.split(path.sep)
+      } catch(e) {
+        console.log('Failed operation')
+      }
+    } else {
+      try {
+        await fs.stat(path.join(...this.arrPath, newPath))
+        this.arrPath.push(newPath)
+      } catch(e) {
+        console.log('Failed operation')
+      }
     }
   }
 
