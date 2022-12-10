@@ -8,6 +8,7 @@ import { Path } from './service/PathService.js'
 import { FileService } from './service/FileService.js'
 import { OsService } from './service/OsService.js'
 import { getHash } from './service/getHash.js'
+import { ZlibService } from './service/ZlibService.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
@@ -18,6 +19,7 @@ cp.fork(path.resolve(__dirname, 'service', 'stdWrite.js'))
 const currentPath = new Path()
 const fileService = new FileService()
 const osService = new OsService()
+const zlibService = new ZlibService()
 
 const actions = async (argv) => {
   const [command, optionOne, optionTwo] = argv.split(' ')
@@ -80,6 +82,16 @@ const actions = async (argv) => {
 
   if (command === 'hash') {
     getHash(filePath, currentPath.path)
+    return
+  }
+
+  if (command === 'compress') {
+    zlibService.compress(filePath, currentPath.path)
+    return
+  }
+
+  if (command === 'decompress') {
+    zlibService.decompress(filePath, currentPath.path)
     return
   }
 
