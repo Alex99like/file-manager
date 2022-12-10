@@ -14,6 +14,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 const userName = getUserName(process.argv)
 
+
 cp.fork(path.resolve(__dirname, 'service', 'stdWrite.js'))
 
 const currentPath = new Path()
@@ -31,6 +32,10 @@ const actions = async (argv) => {
     } else {
       filePath = path.join(currentPath.path, optionOne)
     }
+
+  if (command === '.exit') {
+    process.exit()
+  }
 
   if (command === 'cd') {
     await currentPath.update(optionOne)
@@ -125,13 +130,24 @@ const actions = async (argv) => {
   stdWrite('Invalid input')
 }
 
-const createInputCLI = () => {
+const createInputCLI = (userName) => {
+  
+
+  if (!userName) {
+    stdWrite('Failed operation')
+    process.exit()
+  }
+
   stdWrite(`Welcome to the File Manager, ${userName}!`)
   stdWrite(null, currentPath.path)
 
   process.stdin.on('data', (chunk) => {
     actions(stdChunk(chunk))
   })
+
+  process.on('exit', () => {
+    stdWrite(`Thank you for using File Manager, ${userName}, goodbye!`)
+  })
 }
 
-createInputCLI()
+createInputCLI(userName)
