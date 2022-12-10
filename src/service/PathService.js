@@ -20,7 +20,9 @@ export class Path {
     } else {
       try {
         await fs.stat(path.join(...this.arrPath, newPath))
-        this.arrPath.push(newPath)
+        newPath.split(path.sep).forEach((el) => {
+          this.arrPath.push(el)
+        })  
       } catch(e) {
         console.log('Failed operation')
       }
