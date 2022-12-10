@@ -4,7 +4,6 @@ import path from 'path'
 import cp from 'child_process'
 import { fileURLToPath } from 'url'
 import { stdChunk, stdWrite } from './stdWrite.js'
-import { on } from 'events'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 

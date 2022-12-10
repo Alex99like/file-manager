@@ -6,6 +6,7 @@ import cp from 'child_process'
 import { fileURLToPath } from 'url'
 import { Path } from './service/PathService.js'
 import { FileService } from './service/FileService.js'
+import { OsService } from './service/OsService.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
@@ -15,6 +16,7 @@ cp.fork(path.resolve(__dirname, 'service', 'stdWrite.js'))
 
 const currentPath = new Path()
 const fileService = new FileService()
+const osService = new OsService()
 
 const actions = async (argv) => {
   const [command, optionOne, optionTwo] = argv.split(' ')
@@ -73,6 +75,33 @@ const actions = async (argv) => {
   if (command === 'add') {
     fileService.createFile(filePath, currentPath.path)
     return
+  }
+
+  if (command === 'os') {
+    if (optionOne === '--EOL') {
+      osService.eol(currentPath.path)
+      return
+    }
+
+    if (optionOne === '--cpus') {
+      osService.cpus(currentPath.path)
+      return
+    }
+
+    if (optionOne === '--homedir') {
+      osService.homedir(currentPath.path)
+      return
+    }
+
+    if (optionOne === '--username') {
+      osService.username(currentPath.path)
+      return
+    }
+
+    if (optionOne === '--architecture') {
+      osService.architecture(currentPath.path)
+      return
+    }
   }
 
   stdWrite('Invalid input')
