@@ -7,6 +7,7 @@ import { fileURLToPath } from 'url'
 import { Path } from './service/PathService.js'
 import { FileService } from './service/FileService.js'
 import { OsService } from './service/OsService.js'
+import { getHash } from './service/getHash.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
@@ -74,6 +75,11 @@ const actions = async (argv) => {
 
   if (command === 'add') {
     fileService.createFile(filePath, currentPath.path)
+    return
+  }
+
+  if (command === 'hash') {
+    getHash(filePath, currentPath.path)
     return
   }
 
