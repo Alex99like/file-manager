@@ -13,14 +13,18 @@ export class Path {
     if (pathAbs) {
       try {
         await fs.stat(path.join(newPath))
-        this.arrPath = newPath.split(path.sep)
+        let pathArr = newPath.split(path.sep)
+        if (pathArr.length === 1) pathArr = newPath.split('/')
+        this.arrPath = pathArr
       } catch(e) {
         console.log('Failed operation')
       }
     } else {
       try {
         await fs.stat(path.join(...this.arrPath, newPath))
-        newPath.split(path.sep).forEach((el) => {
+        let pathArr = newPath.split(path.sep)
+        if (pathArr.length === 1) pathArr = newPath.split('/')
+        pathArr.forEach((el) => {
           this.arrPath.push(el)
         })  
       } catch(e) {
