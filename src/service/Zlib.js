@@ -14,7 +14,7 @@ export class Zlib {
   async compress(pathFile, newPath) {
     try {
       const pipe = promisify(pipeline)
-      const gzip = zlib.createGzip()
+      const gzip = zlib.createBrotliCompress()
       const input = createReadStream(path.join(process.cwd(), pathFile))
       await fs.stat(pathFile)
 
@@ -31,7 +31,7 @@ export class Zlib {
   async decompress(pathFile, newPath) {
     try {
       const pipe = promisify(pipeline)
-      const gzip = zlib.createUnzip()
+      const gzip = zlib.createBrotliDecompress()
       const input = createReadStream(path.join(process.cwd(), pathFile))
       await fs.stat(pathFile)
 
