@@ -58,7 +58,6 @@ export class Emitter {
   }
 
   async listen(parameters) {
-    console.log(parseString(parameters))
     const [command, optionOne, optionTwo] = parseString(parameters)
 
     try {
