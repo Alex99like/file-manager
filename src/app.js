@@ -1,27 +1,36 @@
 import process from 'process'
-import { getUserName } from './utils/getUserName.js'
-import { stdChunk, stdWrite } from './service/stdWrite.js'
-import { actions } from './service/actions.js'
 import os from 'os'
+import { Emitter } from './service/Emitter.js'
+import { getUserName } from './utils/getNameUser.js'
 
-const userName = getUserName(process.argv)
+const initCLI = () => {
+  try {
+    const username = getUserName(process.argv)
+    
+    if (!username) {
+      throw new Error()
+    } else {
+      console.log(`Welcome to the File Manager, ${username}!`)
+    }
 
-const createInputCLI = (userName) => {
-  if (!userName) {
-    stdWrite('Failed operation')
-    process.exit()
+    const emit = new Emitter()
+
+    process.chdir(os.homedir())
+    console.log(`You are currently in ${process.cwd()}`)
+    
+    process.on('exit', () => {
+      console.log(`Thank you for using File Manager, ${username}, goodbye!`)
+    })
+
+    process.stdin.on('data', (data) => {
+      emit.listen(data.toString('utf-8').trim())
+    })
+
+  } catch(e) {
+    console.log('Failed operation')
   }
-
-  stdWrite(`Welcome to the File Manager, ${userName}!`)
-  stdWrite(null, os.homedir())
-
-  process.stdin.on('data', (chunk) => {
-    actions(stdChunk(chunk))
-  })
-
-  process.on('exit', () => {
-    stdWrite(`Thank you for using File Manager, ${userName}, goodbye!`)
-  })
 }
 
-createInputCLI(userName)
+initCLI()
+
+
