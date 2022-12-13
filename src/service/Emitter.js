@@ -52,9 +52,9 @@ export class Emitter {
 
     this.emitter.on('hash', (path) => this.hashService.hash(path))
 
-    this.emitter.on('compress', (pathFile) => this.zlibService.compress(path.join(process.cwd(), pathFile)))
+    this.emitter.on('compress', (pathFile, newPath) => this.zlibService.compress(pathFile, newPath))
 
-    this.emitter.on('decompress', (pathFile) => this.zlibService.decompress(path.join(process.cwd(), pathFile)))
+    this.emitter.on('decompress', (pathFile, newPath) => this.zlibService.decompress(pathFile, newPath))
   }
 
   async listen(parameters) {

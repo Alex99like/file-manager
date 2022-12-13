@@ -11,14 +11,16 @@ export class Zlib {
     this.error = error
   }
 
-  async compress(pathFile) {
+  async compress(pathFile, newPath) {
     try {
       const pipe = promisify(pipeline)
       const gzip = zlib.createGzip()
-      const input = createReadStream(pathFile)
+      const input = createReadStream(path.join(process.cwd(), pathFile))
       await fs.stat(pathFile)
 
-      const out = createWriteStream(pathFile + '.gz')
+      const nameGz = pathFile + '.gz'
+      
+      const out = createWriteStream(path.join(newPath, nameGz))
       await pipe(input, gzip, out);
       this.success()
     } catch(e) {
@@ -26,15 +28,15 @@ export class Zlib {
     }
   }
 
-  async decompress(pathFile) {
+  async decompress(pathFile, newPath) {
     try {
       const pipe = promisify(pipeline)
       const gzip = zlib.createUnzip()
-      const input = createReadStream(pathFile)
+      const input = createReadStream(path.join(process.cwd(), pathFile))
       await fs.stat(pathFile)
 
       const nameGz = pathFile.replace('.gz', '')
-      const out = createWriteStream(nameGz)
+      const out = createWriteStream(path.join(newPath, nameGz))
       await pipe(input, gzip, out);
       this.success()
     } catch(e) {
