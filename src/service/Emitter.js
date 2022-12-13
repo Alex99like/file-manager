@@ -6,6 +6,7 @@ import process from "process";
 import { OS } from "./OS.js";
 import { Hash } from "./Hash.js";
 import { Zlib } from "./Zlib.js";
+import { parseString } from "../utils/parseString.js";
 
 export class Emitter {
   constructor() {
@@ -57,7 +58,8 @@ export class Emitter {
   }
 
   async listen(parameters) {
-    const [command, optionOne, optionTwo] = parameters.split(' ')
+    console.log(parseString(parameters))
+    const [command, optionOne, optionTwo] = parseString(parameters)
 
     try {
       if (this.emitter.eventNames().includes(command)) {
