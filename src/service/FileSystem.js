@@ -45,8 +45,8 @@ export class FileSystem {
   }
 
   async cp(pathFile, newPath, rm) {
-    const one = path.join(process.cwd(), pathFile)
-    const two = path.join(newPath, pathFile)
+    const one = path.resolve(process.cwd(), pathFile)
+    const two = path.resolve(newPath, path.basename(pathFile))
 
     const input = createReadStream(one)
     const out = createWriteStream(two)
