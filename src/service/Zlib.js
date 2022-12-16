@@ -15,12 +15,12 @@ export class Zlib {
     try {
       const pipe = promisify(pipeline)
       const gzip = zlib.createBrotliCompress()
-      const input = createReadStream(path.join(process.cwd(), pathFile))
+      const input = createReadStream(path.resolve(process.cwd(), pathFile))
       await fs.stat(pathFile)
 
       const nameGz = pathFile + '.gz'
       
-      const out = createWriteStream(path.join(newPath, nameGz))
+      const out = createWriteStream(path.resolve(newPath, nameGz))
       await pipe(input, gzip, out);
       this.success()
     } catch(e) {
@@ -32,11 +32,11 @@ export class Zlib {
     try {
       const pipe = promisify(pipeline)
       const gzip = zlib.createBrotliDecompress()
-      const input = createReadStream(path.join(process.cwd(), pathFile))
+      const input = createReadStream(path.resolve(process.cwd(), pathFile))
       await fs.stat(pathFile)
 
       const nameGz = pathFile.replace('.gz', '')
-      const out = createWriteStream(path.join(newPath, nameGz))
+      const out = createWriteStream(path.resolve(newPath, nameGz))
       await pipe(input, gzip, out);
       this.success()
     } catch(e) {

@@ -19,7 +19,7 @@ const initCLI = () => {
     console.log(`You are currently in ${process.cwd()}`)
     
     process.on('exit', () => {
-      console.log(`Thank you for using File Manager, ${username}, goodbye!`)
+      process.stdout.write(`Thank you for using File Manager, ${username}, goodbye!`)
     })
 
     process.stdin.on('data', (data) => {
