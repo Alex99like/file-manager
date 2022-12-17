@@ -37,8 +37,9 @@ export class FileSystem {
   }
 
   async rn(pathName, newName) {
+    const basename = pathFile.split(path.sep)
     const oldFile = path.resolve(process.cwd(), pathName)
-    const newFile = path.resolve(oldFile.replace(path.win32.basename(oldFile), newName))
+    const newFile = path.resolve(oldFile.replace(basename, newName))
     try {
       await fs.rename(oldFile, newFile)
       this.success()
@@ -49,8 +50,9 @@ export class FileSystem {
 
   async cp(pathFile, newPath, rm) {
     try {
-      const one = path.resolve(process.cwd(), pathFile)
-      const two = path.resolve(newPath, path.win32.basename(pathFile))
+      const basename = pathFile.split(path.sep)
+      const one = path.isAbsolute(pathFile) ? path.resolve(pathFile) : path.resolve(process.cwd(), pathFile)
+      const two = path.resolve(newPath, basename[basename.length - 1])
 
       const input = createReadStream(one)
       const out = createWriteStream(two)
