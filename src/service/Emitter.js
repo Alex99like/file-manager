@@ -9,7 +9,8 @@ import { Zlib } from "./Zlib.js";
 import { parseString } from "../utils/parseString.js";
 
 export class Emitter {
-  constructor() {
+  constructor(name) {
+    this.username = name
     this.emitter = new EventEmitter()
     this.pathService = new Path(this.error, this.success)
     this.fileService = new FileSystem(this.error, this.success)
@@ -28,7 +29,10 @@ export class Emitter {
   }
 
   init() {
-    this.emitter.on('.exit', () => process.exit())
+    this.emitter.on('.exit', () => {
+      process.stdout.write(`Thank you for using File Manager, ${this.username}, goodbye! \n`)
+      process.exit()
+    })
 
     this.emitter.on('cd', (path) => this.pathService.cd(path))
 

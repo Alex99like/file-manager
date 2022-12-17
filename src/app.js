@@ -13,7 +13,7 @@ const initCLI = () => {
       console.log(`Welcome to the File Manager, ${username}!`)
     }
 
-    const emit = new Emitter()
+    const emit = new Emitter(username)
 
     process.chdir(os.homedir())
     console.log(`You are currently in ${process.cwd()}`)

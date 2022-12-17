@@ -19,7 +19,7 @@ export class Zlib {
       await fs.stat(pathFile)
 
       const nameGz = newPath.endsWith('.gz') ? newPath : newPath + '.gz'
-      const out = createWriteStream(path.resolve(path.isAbsolute(newPath) ? path.resolve(newPath) : path.resolve(process.cwd(), newPath), nameGz))
+      const out = createWriteStream(path.isAbsolute(newPath) ? path.resolve(newPath) : path.resolve(process.cwd(), nameGz))
       await pipe(input, gzip, out);
       this.success()
     } catch(e) {
