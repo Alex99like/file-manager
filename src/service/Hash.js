@@ -11,7 +11,7 @@ export class Hash {
   
   hash(pathFile) {
     const hash = crypto.createHash('sha256')
-    const input = createReadStream(path.resolve(process.cwd(), pathFile))
+    const input = createReadStream(path.isAbsolute(pathFile) ? path.resolve(pathFile) : path.resolve(process.cwd(), pathFile))
     input.on('error', () => this.error())
 
     input.on('readable', () => {
