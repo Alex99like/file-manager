@@ -18,14 +18,13 @@ export class Zlib {
       const input = createReadStream(path.resolve(process.cwd(), pathFile))
       await fs.stat(pathFile)
 
-      const nameGz = pathFile + '.gz'
-      
+      const nameGz = newPath.endsWith('.gz') ? newPath : newPath + '.gz'
       const out = createWriteStream(path.resolve(newPath, nameGz))
       await pipe(input, gzip, out);
       this.success()
     } catch(e) {
       this.error()
-    }
+    } 
   }
 
   async decompress(pathFile, newPath) {
@@ -35,8 +34,8 @@ export class Zlib {
       const input = createReadStream(path.resolve(process.cwd(), pathFile))
       await fs.stat(pathFile)
 
-      const nameGz = pathFile.replace('.gz', '')
-      const out = createWriteStream(path.resolve(newPath, nameGz))
+      const nameGz = newPath.endsWith('.gz') ? newPath.replace('.gz', '') : newPath
+      const out = createWriteStream(path.resolve(nameGz))
       await pipe(input, gzip, out);
       this.success()
     } catch(e) {
