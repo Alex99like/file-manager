@@ -28,14 +28,14 @@ export class Path {
       
       for await (const item of res) {
         if ((await fs.stat(path.join(process.cwd(), item))).isDirectory()) {
-          result.push({Name: item, Types: 'dir'})
+          result.push({Name: item, Types: 'directory'})
         } else if ((await fs.stat(path.join(process.cwd(), item))).isFile()) {
           result.push({Name: item, Types: 'file'})
         } else {
           unknown.push({Name: item, Types: 'unknown'})
         }
       }
-      console.table(result.sort((a) => a.Types === 'dir' ? -1 : 1).concat(unknown))
+      console.table(result.sort((a) => a.Types === 'directory' ? -1 : 1).concat(unknown))
       this.success()
     } catch(e) {
       this.error()

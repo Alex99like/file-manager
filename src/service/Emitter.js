@@ -46,13 +46,13 @@ export class Emitter {
 
     this.emitter.on('rm', (path) => this.fileService.rm(path))
 
-    this.emitter.on('rn', (path, name) => this.fileService.rn(path, name))
+    this.emitter.on('rn', (path, _, __, name) => this.fileService.rn(path, name))
 
     this.emitter.on('cp', (path, newPath) => this.fileService.cp(path, newPath))
 
     this.emitter.on('mv', (path, newPath) => this.fileService.cp(path, newPath, 'rm'))
 
-    this.emitter.on('os', (option) => this.osService.listen(option))
+    this.emitter.on('os', (_, __, option) => this.osService.listen(option))
 
     this.emitter.on('hash', (path) => this.hashService.hash(path))
 
@@ -69,7 +69,7 @@ export class Emitter {
 
     try {
       if (this.emitter.eventNames().includes(command)) {
-        this.emitter.emit(command, pathOne, pathTwo)
+        this.emitter.emit(command, pathOne, pathTwo, optionOne, optionTwo)
       } else {
         console.log('Invalid input')
       }

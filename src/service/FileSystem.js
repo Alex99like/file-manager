@@ -39,8 +39,7 @@ export class FileSystem {
   async rn(pathName, newName) {
     try {
       const basename = pathName.split(path.sep)
-      const name = newName.split(path.sep)
-      const newFile = path.resolve(pathName.replace(basename[basename.length - 1], name[name.length - 1]))
+      const newFile = path.resolve(pathName.replace(basename[basename.length - 1], newName))
     
       await fs.rename(pathName, newFile)
       this.success()
