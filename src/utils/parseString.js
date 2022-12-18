@@ -12,9 +12,16 @@ export const parseString = (path) => {
       if (single === 2) single = 0
       if (double === 2) double = 0
 
+      if (single > 0 && path[i] === '\"') {
+        string += '\"'
+      } else if (double > 0 && path[i] === '\'') {
+        string += '\''
+      } 
+
       if (path[i] !== '\'' && path[i] !== '\"') {
         string += path[i]
       }
+
     } else {
       if (single === 0 && double === 0) {
         res.push(string)

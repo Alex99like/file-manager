@@ -62,12 +62,14 @@ export class Emitter {
   }
 
   async listen(parameters) {
-    const [command, optionOne, optionTwo] = parseString(parameters)
+    const [command, optionOne, optionTwo, error] = parseString(parameters)
 
     const pathOne = optionOne ? path.isAbsolute(optionOne) ? path.resolve(optionOne) : path.resolve(process.cwd(), optionOne) : undefined
     const pathTwo = optionTwo ? path.isAbsolute(optionTwo) ? path.resolve(optionTwo) : path.resolve(process.cwd(), optionTwo) : undefined
 
     try {
+      if (error) throw new Error()
+
       if (this.emitter.eventNames().includes(command)) {
         this.emitter.emit(command, pathOne, pathTwo, optionOne, optionTwo)
       } else {
