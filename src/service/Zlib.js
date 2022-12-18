@@ -13,13 +13,13 @@ export class Zlib {
 
   async compress(pathFile, newPath) {
     try {
+      await fs.access(pathFile)
       const pipe = promisify(pipeline)
       const gzip = zlib.createBrotliCompress()
-      const input = createReadStream(path.isAbsolute(pathFile) ? path.resolve(pathFile) : path.resolve(process.cwd(), pathFile))
-      await fs.stat(path.isAbsolute(pathFile) ? path.resolve(pathFile) : path.resolve(process.cwd(), pathFile))
+      const input = createReadStream(pathFile)
       
       const nameGz = newPath.endsWith('.gz') ? newPath : newPath + '.gz'
-      const out = createWriteStream(path.isAbsolute(nameGz) ? path.resolve(nameGz) : path.resolve(process.cwd(), nameGz))
+      const out = createWriteStream(nameGz)
       await pipe(input, gzip, out);
       this.success()
     } catch(e) {
@@ -29,13 +29,13 @@ export class Zlib {
 
   async decompress(pathFile, newPath) {
     try {
+      await fs.access(pathFile)
       const pipe = promisify(pipeline)
       const gzip = zlib.createBrotliDecompress()
-      const input = createReadStream(path.isAbsolute(pathFile) ? path.resolve(pathFile) : path.resolve(process.cwd(), pathFile))
-      await fs.stat(path.isAbsolute(pathFile) ? path.resolve(pathFile) : path.resolve(process.cwd(), pathFile))
+      const input = createReadStream(pathFile)
 
       const nameGz = newPath.endsWith('.gz') ? newPath.replace('.gz', '') : newPath
-      const out = createWriteStream(path.isAbsolute(nameGz) ? path.resolve(nameGz) : path.resolve(process.cwd(), nameGz))
+      const out = createWriteStream(nameGz)
       await pipe(input, gzip, out);
       this.success()
     } catch(e) {

@@ -13,7 +13,7 @@ export class FileSystem {
   
   cat(pathName) {
     
-    const stream = createReadStream(path.resolve(path.isAbsolute(pathName) ? path.resolve(pathName) : path.resolve(process.cwd(), pathName)))
+    const stream = createReadStream(pathName)
     stream.on('data', (data) => {
       process.stdout.write(data.toString('utf-8') + '\n')
     })
@@ -22,14 +22,14 @@ export class FileSystem {
   }
 
   add(pathName) {
-    const stream = createWriteStream(path.resolve(path.isAbsolute(pathName) ? path.resolve(pathName) : path.resolve(process.cwd(), pathName)))
+    const stream = createWriteStream(pathName)
     stream.on('error', () => this.error())
     stream.on('ready', () => this.success())
   }
 
   async rm(pathName) {
     try {
-      await fs.rm(path.resolve(path.isAbsolute(pathName) ? path.resolve(pathName) : path.resolve(process.cwd(), pathName)))
+      await fs.rm(pathName)
       this.success()
     } catch(e) {
       this.error()
@@ -37,11 +37,12 @@ export class FileSystem {
   }
 
   async rn(pathName, newName) {
-    const basename = path.normalize(pathFile).split(path.sep)
-    const oldFile = path.resolve(path.isAbsolute(pathName) ? path.resolve(pathName) : path.resolve(process.cwd(), pathName))
-    const newFile = path.resolve(oldFile.replace(basename[basename.length - 1], newName))
     try {
-      await fs.rename(oldFile, newFile)
+      const basename = pathName.split(path.sep)
+      const name = newName.split(path.sep)
+      const newFile = path.resolve(pathName.replace(basename[basename.length - 1], name[name.length - 1]))
+    
+      await fs.rename(pathName, newFile)
       this.success()
     } catch(e) {
       this.error()
@@ -50,16 +51,16 @@ export class FileSystem {
 
   async cp(pathFile, newPath, rm) {
     try {
-      const basename = path.normalize(pathFile).split(path.sep)
-      const one = path.isAbsolute(pathFile) ? path.resolve(pathFile) : path.resolve(process.cwd(), pathFile)
-      const two = path.resolve(path.isAbsolute(newPath) ? newPath : path.resolve(process.cwd(), newPath), basename[basename.length - 1])
+      await fs.access(pathFile)
+      const basename = pathFile.split(path.sep)
+      const two = path.resolve(newPath, basename[basename.length - 1])
 
-      const input = createReadStream(one)
+      const input = createReadStream(pathFile)
       const out = createWriteStream(two)
       const pipe = promisify(pipeline)
 
       await pipe(input, out);
-      if (rm) await fs.rm(one)
+      if (rm) await fs.rm(pathFile)
       this.success()
     } catch(e) {
       this.error()

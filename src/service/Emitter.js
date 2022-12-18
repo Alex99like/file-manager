@@ -64,9 +64,12 @@ export class Emitter {
   async listen(parameters) {
     const [command, optionOne, optionTwo] = parseString(parameters)
 
+    const pathOne = optionOne ? path.isAbsolute(optionOne) ? path.resolve(optionOne) : path.resolve(process.cwd(), optionOne) : undefined
+    const pathTwo = optionTwo ? path.isAbsolute(optionTwo) ? path.resolve(optionTwo) : path.resolve(process.cwd(), optionTwo) : undefined
+
     try {
       if (this.emitter.eventNames().includes(command)) {
-        this.emitter.emit(command, optionOne, optionTwo)
+        this.emitter.emit(command, pathOne, pathTwo)
       } else {
         console.log('Invalid input')
       }

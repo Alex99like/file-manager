@@ -21,7 +21,7 @@ export class Path {
 
   async ls() {
     try {
-      const res = await fs.readdir(process.cwd())
+      const res = await fs.readdir(path.resolve(process.cwd()))
       
       const result = []
       const unknown = []
