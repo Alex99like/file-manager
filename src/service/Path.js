@@ -40,7 +40,6 @@ export class Path {
       console.table(result.sort((a) => a.Types === 'directory' ? -1 : 1).concat(unknown))
       this.success()
     } catch(e) {
-      console.log(e)
       this.error()
     }
   }
