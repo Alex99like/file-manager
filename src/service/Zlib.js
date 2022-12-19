@@ -18,7 +18,7 @@ export class Zlib {
       const gzip = zlib.createBrotliCompress()
       const input = createReadStream(pathFile)
       
-      const nameGz = newPath.endsWith('.gz') ? newPath : newPath + '.gz'
+      const nameGz = newPath.endsWith('.br') ? newPath : newPath + '.br'
       const out = createWriteStream(nameGz)
       await pipe(input, gzip, out);
       this.success()
@@ -36,7 +36,7 @@ export class Zlib {
       const gzip = zlib.createBrotliDecompress()
       const input = createReadStream(pathFile)
 
-      const nameGz = newPath.endsWith('.gz') ? newPath.replace('.gz', '') : newPath
+      const nameGz = newPath.endsWith('.br') ? newPath.replace('.br', '') : newPath
       const out = createWriteStream(nameGz)
       await pipe(input, gzip, out);
       this.success()
