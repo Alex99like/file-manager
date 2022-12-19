@@ -21,6 +21,7 @@ export class Hash {
       else {
         console.log(`${hash.digest('hex')}`);
         this.success()
+        input.close()
       }
     });
     }

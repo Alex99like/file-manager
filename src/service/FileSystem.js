@@ -4,6 +4,7 @@ import path from 'path'
 import process from 'process'
 import { promisify } from 'util'
 import { pipeline } from 'stream'
+import { unlinkSync } from 'fs'
 
 export class FileSystem {
   constructor(error, success) {
@@ -18,18 +19,24 @@ export class FileSystem {
       process.stdout.write(data.toString('utf-8') + '\n')
     })
     stream.on('error', () => this.error())
-    stream.on('end', () => this.success())
+    stream.on('end', () => {
+      this.success()
+      stream.close()
+    })
   }
 
   add(pathName) {
     const stream = createWriteStream(pathName)
     stream.on('error', () => this.error())
-    stream.on('ready', () => this.success())
+    stream.on('ready', () => {
+      this.success()
+      stream.close()
+    })
   }
 
   async rm(pathName) {
     try {
-      await fs.rm(pathName)
+      await fs.unlink(pathName)
       this.success()
     } catch(e) {
       this.error()
@@ -60,6 +67,8 @@ export class FileSystem {
 
       await pipe(input, out);
       if (rm) await fs.rm(pathFile)
+      input.close()
+      out.close()
       this.success()
     } catch(e) {
       this.error()

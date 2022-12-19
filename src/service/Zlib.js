@@ -22,6 +22,8 @@ export class Zlib {
       const out = createWriteStream(nameGz)
       await pipe(input, gzip, out);
       this.success()
+      input.close()
+      out.close()
     } catch(e) {
       this.error()
     } 
@@ -38,6 +40,8 @@ export class Zlib {
       const out = createWriteStream(nameGz)
       await pipe(input, gzip, out);
       this.success()
+      input.close()
+      out.close()
     } catch(e) {
       this.error()
     }
