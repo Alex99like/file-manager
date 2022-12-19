@@ -7,7 +7,7 @@ export class OS {
   }
 
   eol() {
-    console.log(`${os.type()}\n${os.platform()}\n${os.release()}`)
+    console.log(`${JSON.stringify(os.EOL)}`)
   }
 
   cpus() {
